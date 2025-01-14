@@ -4,197 +4,209 @@
 
 ## **Project Overview**
 
-This project is a **Google Sheets-like web application**, developed as part of an assignment, with the following core functionalities:
-1. **Spreadsheet Interface** resembling Google Sheets, including a toolbar, formula bar, and cell grid.
-2. **Mathematical Functions** like SUM, AVERAGE, MAX, MIN, COUNT, and advanced ones like MEDIAN, PRODUCT, and IF.
+This project is a **Google Sheets-like web application**, developed as part of an assignment to showcase a range of technical skills and address real-world spreadsheet functionalities. The application features:
+
+1. A **Spreadsheet Interface** resembling Google Sheets, including a toolbar, formula bar, and interactive grid.
+2. **Mathematical Functions** like SUM, AVERAGE, MAX, MIN, COUNT, and advanced ones such as MEDIAN, PRODUCT, and IF.
 3. **Data Quality Functions** such as TRIM, UPPER, LOWER, REMOVE_DUPLICATES, and FIND_AND_REPLACE.
-4. **Save and Load Functionality** via a Node.js/Express backend.
+4. **Save and Load Functionality** via a Node.js/Express backend with local JSON storage.
 5. **Chart Creation** using Chart.js to visualize data with bar, line, and pie charts.
-6. **Data Entry and Validation** to support multiple data types (numbers, text, dates) and ensure correctness.
-7. **Testing Interface** for users to test functions directly.
-8. **Bonus Features** such as advanced formula handling, relative/absolute references, and chart integration.
+6. **Data Entry and Validation** to ensure correctness and support multiple data types.
+7. Bonus Features like advanced formula handling, relative/absolute references, and performance optimizations.
 
 ---
 
 ## **Technology Stack**
 
 ### **Frontend**
-- **React**: Used for building the dynamic user interface.
-- **AG Grid**: Provides the grid-based spreadsheet functionality with features like drag-fill, editable cells, and range selection.
+- **React**: Component-based framework for building dynamic UIs.
+- **AG Grid**: Provides robust spreadsheet-like functionality.
 - **Chart.js + React-Chart.js-2**: Enables data visualization via bar, line, and pie charts.
 
 ### **Backend**
-- **Node.js with Express.js**: Backend server to handle save/load functionality.
-- **File-based Storage**: For simplicity, the backend uses a JSON file to store spreadsheet data.
+- **Node.js with Express.js**: Backend server for API handling.
+- **File-based Storage**: Uses JSON files for simplicity in saving and loading spreadsheets.
+
+---
 
 ### **Why These Technologies?**
-- **React**: Its component-based architecture simplifies managing complex UI interactions.
-- **AG Grid**: Offers a rich API to emulate Google Sheets functionality, reducing development time.
-- **Chart.js**: Lightweight and powerful for creating interactive data visualizations.
-- **Express.js**: Simple, scalable, and effective for building REST APIs.
+
+- **React**: Simplifies complex UI development with reusable components.
+- **AG Grid**: Offers advanced grid functionalities like editing, range selection, and cell dependency handling, saving development time.
+- **Chart.js**: A lightweight and powerful library for creating customizable and interactive charts.
+- **Express.js**: Minimalistic and efficient backend framework for handling REST APIs.
+
+---
+
+## **Data Structures Used and Why**
+
+### **1. Grid Data (Cell Storage)**
+**Data Structure:** Object  
+**Example:** `{ "A1": { value: "10", type: "number" }, "B2": { value: "=SUM(A1:A5)", type: "formula" } }`
+
+**Why?**  
+- **Simplicity**: Direct lookup of cell data via keys like `A1`.
+- **Flexibility**: Stores metadata (e.g., formatting, data type) alongside values.
+- **Efficiency**: Fast for updates and sparse datasets.
+
+---
+
+### **2. Dependency Graph**
+**Data Structure:** Directed Graph (Adjacency List)  
+**Example:** `{ "B1": ["A1", "A2"], "C1": ["B1"] }`
+
+**Why?**  
+- **Formula Dependencies**: Ensures recalculations propagate correctly.
+- **Performance**: Efficiently handles large datasets with complex interdependencies.
+- **Topological Sorting**: Ensures proper order of recalculations.
+
+---
+
+### **3. Chart Data**
+**Data Structure:** Array of Objects  
+**Example:** `[ { label: "Jan", value: 10 }, { label: "Feb", value: 20 } ]`
+
+**Why?**  
+- **Integration**: Matches the expected format of Chart.js for rendering.
+- **Flexibility**: Easily maps grid data to this format for visualizations.
+
+---
+
+### **4. Selected Range**
+**Data Structure:** Object  
+**Example:** `{ start: "A1", end: "B3" }`
+
+**Why?**  
+- **Simplicity**: Easy to parse and use for operations like SUM, AVERAGE, or chart creation.
+- **Consistency**: Matches grid and formula data structures seamlessly.
+
+---
+
+### **5. Undo/Redo Stack**
+**Data Structure:** Stack (Array)  
+**Example:** `[{ action: "edit", cell: "A1", oldValue: "10", newValue: "20" }]`
+
+**Why?**  
+- **Lightweight**: Stores only changes, minimizing memory usage.
+- **Ease of Use**: Stack operations directly map to undo/redo functionalities.
+
+---
+
+### **6. Validation Rules**
+**Data Structure:** Hash Map (Object)  
+**Example:** `{ "A1": { type: "number", required: true } }`
+
+**Why?**  
+- **Fast Lookups**: Quickly verify rules for a specific cell.
+- **Extensibility**: Easily add rules (e.g., "min", "max") without restructuring.
 
 ---
 
 ## **Key Features**
 
 ### **1. Spreadsheet Interface**
-- **Grid Design**: Editable cells with support for dynamic row/column updates.
-- **Formula Bar**: Displays and allows editing of the active cell's formula or value.
-- **Toolbar**: Supports bold, italic, font size, color, and other cell formatting options.
-- **Drag-Fill**: Allows users to drag and copy values or formulas across cells.
+- Toolbar for formatting (bold, italics, font size, color).
+- Formula bar for editing/displaying cell formulas.
+- Drag-fill functionality for copying formulas and values.
+
+---
 
 ### **2. Mathematical Functions**
-- **Basic Functions**: SUM, AVERAGE, MAX, MIN, COUNT.
-- **Advanced Functions**: MEDIAN, PRODUCT, IF (with conditional logic).
+- **Basic**: SUM, AVERAGE, MAX, MIN, COUNT.
+- **Advanced**: MEDIAN, PRODUCT, IF.
+
+---
 
 ### **3. Data Quality Functions**
-- TRIM: Removes leading/trailing whitespace.
-- UPPER: Converts text to uppercase.
-- LOWER: Converts text to lowercase.
-- REMOVE_DUPLICATES: Removes duplicate rows in a selected range.
-- FIND_AND_REPLACE: Finds specific text and replaces it.
+- TRIM, UPPER, LOWER, REMOVE_DUPLICATES, FIND_AND_REPLACE.
+
+---
 
 ### **4. Chart Creation**
-- Users can select a range and create bar, line, or pie charts.
-- Chart type selection and visualization are integrated into the UI.
+- Create bar, line, or pie charts based on selected ranges.
+
+---
 
 ### **5. Save and Load**
-- Backend APIs:
-  - `POST /save`: Saves the current spreadsheet data by sheet ID.
-  - `GET /load/:sheetId`: Loads saved spreadsheet data by sheet ID.
+- Save and load spreadsheets via backend API.
+
+---
 
 ### **6. Data Entry and Validation**
 - Supports numbers, text, and dates.
-- Validates numeric cells to prevent invalid inputs.
-- Provides user feedback for incorrect entries.
-
-### **7. Testing Interface**
-- Users can test formulas (e.g., `=SUM(A1:A5)`) and see results instantly.
-- Displays results dynamically, including errors for invalid formulas.
+- Provides feedback for invalid entries.
 
 ---
 
 ## **Non-Functional Enhancements**
 
-### **Security**
-- Input sanitization to prevent XSS or injection attacks.
-- Backend validation for data integrity.
+### **1. Security**
+- **Input Sanitization**: Prevents XSS and injection attacks.
+- **Backend Validation**: Ensures API integrity and data consistency.
 
-### **Performance**
-- Debounced updates for formula recalculation to avoid unnecessary computations.
-- Optimized rendering for large datasets using AG Grid’s virtual scrolling.
+---
 
-### **Accessibility**
-- Keyboard navigation for ease of use.
-- Proper ARIA roles and labels for improved screen reader support.
+### **2. Performance**
+- **Lazy Loading**: Efficient rendering for large datasets.
+- **Debounced Updates**: Prevents redundant formula recalculations.
+- **Optimized Dependencies**: Dependency graph ensures minimal recalculations.
+
+---
+
+### **3. Accessibility**
+- **Keyboard Navigation**: Full support for tabbing and arrow keys.
+- **Screen Reader Support**: Proper ARIA roles for enhanced usability.
 
 ---
 
 ## **Setup and Installation**
 
-### **Prerequisites**
-- Node.js (v16 or higher recommended)
-
-### **Steps**
-1. **Clone the Repository**
+1. Clone the repository:
    ```bash
    git clone <your-github-repo-url>
    cd google-sheets-like
    ```
 
-2. **Install Backend Dependencies**
+2. Install backend dependencies:
    ```bash
    npm install
    ```
 
-3. **Start the Backend Server**
+3. Start the backend server:
    ```bash
    npm start
    ```
-   The server runs at `http://localhost:4000`.
 
-4. **Install Frontend Dependencies**
+4. Install frontend dependencies:
    ```bash
    cd client
    npm install
    ```
 
-5. **Start the Frontend**
+5. Start the frontend:
    ```bash
    npm start
    ```
-   The app runs at `http://localhost:3000`.
-
----
-
-## **Usage Instructions**
-
-1. **Basic Spreadsheet Features**
-   - Click a cell to edit it.
-   - Use the formula bar to enter formulas like `=SUM(A1:A5)` or values like `Hello`.
-
-2. **Formatting**
-   - Use the toolbar to apply bold, italics, font size, or color to the selected cell.
-
-3. **Testing Formulas**
-   - Enter a formula in the "Test Formula" section to validate it.
-
-4. **Chart Creation**
-   - Enter numeric data in column A.
-   - Click "Create Chart" and choose a chart type (bar, line, or pie).
-
-5. **Save and Load**
-   - Enter a unique sheet ID and click "Save" to store your spreadsheet.
-   - Enter the same ID and click "Load" to retrieve your data.
-
----
-
-## **GitHub Repository**
-
-**Link**: [GitHub Repo URL](#)
 
 ---
 
 ## **Testing**
 
-### **Key Test Cases**
-1. Formula Testing:
-   - Test with `=SUM(A1:A5)` where cells contain numbers.
-   - Verify edge cases (empty cells, invalid references).
-2. Data Validation:
-   - Enter non-numeric data in numeric cells; ensure validation feedback.
-3. Chart Creation:
-   - Create charts for various datasets and verify accuracy.
+### **Test Cases**
+1. Test mathematical functions with sample data.
+2. Verify data quality functions on text-heavy cells.
+3. Confirm save/load functionality with multiple sheets.
+4. Test chart creation for different datasets and chart types.
 
 ---
 
-## **Future Enhancements**
-- Real-time collaboration using WebSockets.
-- Export options (CSV, Excel, PDF).
-- Advanced charting capabilities (stacked bar, scatter plot).
-- Integration with authentication (e.g., Google OAuth).
+## **GitHub Repository**
 
----
+[GitHub Repository Link](https://github.com/mrunal4098/google-sheet-like)
 
-## **Evaluation Criteria Checklist**
-
-| Criteria                                   | Status       |
-|-------------------------------------------|--------------|
-| **Google Sheets-like UI**                 | ✅ Completed |
-| **Mathematical Functions**                | ✅ Completed |
-| **Data Quality Functions**                | ✅ Completed |
-| **Chart Creation**                        | ✅ Completed |
-| **Save & Load**                           | ✅ Completed |
-| **Usability & Intuitiveness**             | ✅ High      |
-| **Code Quality & Maintainability**        | ✅ Modular   |
-| **Bonus Features**                        | ✅ Included  |
 
 ---
 
 ## **Conclusion**
 
-This project delivers a feature-complete, Google Sheets-like web application, fulfilling all core and bonus requirements. The application is thoroughly tested, and the code is modular and well-documented for maintainability.
-
---- 
-
-Feel free to ask for further clarifications or enhancements. Let me know when you're ready to package this into a **PDF** for submission!
+This project meets all assignment requirements, including core and bonus features. The modular architecture and optimizations make it scalable, secure, and efficient.
